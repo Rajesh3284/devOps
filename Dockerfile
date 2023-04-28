@@ -1,4 +1,4 @@
-  GNU nano 6.2                                                                                     Dockerfile                                                                                              
+                                                                                         
 # Use an official Ubuntu 22.04 as a base image
 FROM ubuntu:22.04
 
