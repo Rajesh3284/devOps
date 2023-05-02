@@ -27,15 +27,5 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            script {
-                def containerName = "my-site-${env.BUILD_NUMBER}"
-                def imageName = "my-app:${env.BUILD_NUMBER}"
-                sh "docker stop ${containerName}"
-                sh "docker rm ${containerName}"
-                sh "docker rmi -f ${imageName}"
-            }
-        }
-    }
+
 }
