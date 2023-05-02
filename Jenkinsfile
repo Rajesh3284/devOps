@@ -18,8 +18,8 @@ pipeline {
         }
 	  stage('Tag and push Docker image') {
 		steps {
-		    sh 'docker tag my-image rajesh7700/my-image:latest'
-                sh 'docker push rajesh7700/my-image:latest'
+		   
+                sh 'docker push rajesh7700/devops:my-image'
             }
 	  }
     }
