@@ -1,29 +1,26 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Checkout Git') {
             steps {
-                // Checkout the code from Git repository
-                git 'https://github.com/Sriharsha-Uppala/devOps.git'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/Rajesh3284/devOps.git']]])
             }
         }
-        stage('Build image') {
+        stage('Build Docker Image') {
             steps {
-                // Build the Docker image using the Dockerfile in the repo
-                sh 'docker build -t mysite .'
+                sh 'docker build -t my-image .'
             }
         }
-        stage('Push image to Docker Hub') {
+        stage('Run Docker Container') {
             steps {
-                // Push the Docker image to Docker Hub repository
-                sh 'docker push sriharsha7/devops:mysite'
+                sh 'docker run -d -p 80:80 my-image'
             }
         }
-        stage('Deploy to Kubernetes') {
-            steps {
-                // Deploy the Docker image to Kubernetes using kubectl
-                sh 'kubectl apply -f kubernetes-manifest.yaml'
+	  stage('Tag and push Docker image') {
+		steps {
+		    sh 'docker tag my-image rajesh7700/my-image:latest'
+                sh 'docker push rajesh7700/my-image:latest'
             }
-        }
+	  }
     }
 }
