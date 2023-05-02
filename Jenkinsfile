@@ -4,6 +4,16 @@ pipeline {
         imageName = "my-app"
 	  containerName = "my-site"
     }
+    post {
+        always {
+            script {
+                
+                sh "docker stop ${env.containerName}"
+                sh "docker rm ${env.containerName}"
+                sh "docker rmi -f ${env.imageName}"
+            }
+        }
+    }
     stages {
         stage('Checkout Git') {
             steps {
@@ -29,14 +39,5 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            script {
-                
-                sh "docker stop ${env.containerName}"
-                sh "docker rm ${env.containerName}"
-                sh "docker rmi -f ${env.imageName}"
-            }
-        }
-    }
+    
 }
