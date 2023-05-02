@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        imageName = "my-app"
+	  containerName = "my-site"
+    }
     stages {
         stage('Checkout Git') {
             steps {
@@ -8,10 +12,8 @@ pipeline {
         }
         stage('Build image') {
             steps {
-                def imageName = "my-app:${env.BUILD_NUMBER}"
-                    def containerName = "my-site-${env.BUILD_NUMBER}"
-                    sh "docker build -t ${imageName} ."
-                    sh "docker run --rm -d --name ${containerName} -p 80:80 ${imageName}"
+                    sh "docker build -t ${env.imageName} ."
+                    sh "docker run --rm -d --name ${env.containerName} -p 80:80 ${enmv.imageName}"
             }
         }
         stage('Push image to Docker Hub') {
@@ -27,5 +29,15 @@ pipeline {
             }
         }
     }
-
+    post {
+        always {
+            script {
+                def containerName = "my-site-${env.BUILD_NUMBER}"
+                def imageName = "my-app:${env.BUILD_NUMBER}"
+                sh "docker stop ${containerName}"
+                sh "docker rm ${containerName}"
+                sh "docker rmi -f ${imageName}"
+            }
+        }
+    }
 }
