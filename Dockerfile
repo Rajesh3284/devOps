@@ -7,7 +7,6 @@ FROM ubuntu:22.04
 RUN apt-get update && apt-get install -y nodejs npm curl wget net-tools
 
  
-
 # Set the working directory
 WORKDIR /app
 
